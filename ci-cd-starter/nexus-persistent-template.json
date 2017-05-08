@@ -1,0 +1,204 @@
+{
+  "kind": "List",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "nexus"
+  },
+  "items": [
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "nexus-pvc",
+        "namespace": "pipelines"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteMany"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "1Gi"
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "DeploymentConfig",
+      "metadata": {
+        "labels": {
+          "app": "nexus"
+        },
+        "name": "nexus",
+        "namespace": "pipelines"
+      },
+      "spec": {
+        "replicas": 1,
+        "selector": {
+          "app": "nexus",
+          "deploymentconfig": "nexus"
+        },
+        "strategy": {
+          "activeDeadlineSeconds": 21600,
+          "resources": {},
+          "rollingParams": {
+            "intervalSeconds": 1,
+            "maxSurge": "25%",
+            "maxUnavailable": "25%",
+            "timeoutSeconds": 600,
+            "updatePeriodSeconds": 1
+          },
+          "type": "Rolling"
+        },
+        "template": {
+          "metadata": {
+            "creationTimestamp": null,
+            "labels": {
+              "app": "nexus",
+              "deploymentconfig": "nexus"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "image": "nexus",
+                "imagePullPolicy": "Always",
+                "name": "nexus",
+                "ports": [
+                  {
+                    "containerPort": 8081,
+                    "protocol": "TCP"
+                  }
+                ],
+                "resources": {
+                  "requests": {
+                    "memory": "2Gi"
+                  }
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "volumeMounts": [
+                  {
+                    "mountPath": "/nexus-data",
+                    "name": "nexus"
+                  }
+                ]
+              }
+            ],
+            "dnsPolicy": "ClusterFirst",
+            "restartPolicy": "Always",
+            "securityContext": {
+              "capabilities": {},
+              "privileged": false
+            },
+            "terminationGracePeriodSeconds": 30,
+            "volumes": [
+              {
+                "persistentVolumeClaim": {
+                  "claimName": "nexus-pvc"
+                },
+                "name": "nexus"
+              }
+            ]
+          }
+        },
+        "test": false,
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          },
+          {
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "nexus"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "name": "nexus:latest",
+                "namespace": "pipelines"
+              }
+            },
+            "type": "ImageChange"
+          }
+        ]
+      }
+    },{
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "labels": {
+          "app": "nexus"
+        },
+        "name": "nexus",
+        "namespace": "pipelines"
+      },
+      "spec": {
+        "ports": [
+          {
+            "port": 8081,
+            "protocol": "TCP",
+            "targetPort": 8081
+          }
+        ],
+        "selector": {
+          "app": "nexus",
+          "deploymentconfig": "nexus"
+        },
+        "sessionAffinity": "None",
+        "type": "ClusterIP"
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "ImageStream",
+      "metadata": {
+        "labels": {
+          "app": "nexus"
+        },
+        "name": "nexus",
+        "namespace": "pipelines"
+      },
+      "spec": {
+        "tags": [
+          {
+            "annotations": {
+              "openshift.io/imported-from": "sonatype/docker-nexus3"
+            },
+            "from": {
+              "kind": "DockerImage",
+              "name": "sonatype/docker-nexus3"
+            },
+            "importPolicy": {},
+            "name": "latest",
+            "referencePolicy": {
+              "type": "Source"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Route",
+      "metadata": {
+        "labels": {
+          "app": "nexus"
+        },
+        "name": "nexus",
+        "namespace": "pipelines"
+      },
+      "spec": {
+        "port": {
+          "targetPort": 8081
+        },
+        "to": {
+          "kind": "Service",
+          "name": "nexus",
+          "weight": 100
+        },
+        "wildcardPolicy": "None"
+      }
+    }
+  ]
+}
