@@ -215,7 +215,7 @@
       "description": "Maximum amount of memory the container can use.",
       "displayName": "Memory Limit",
       "name": "MEMORY_LIMIT",
-      "value": "2Gi"
+      "value": "512Mi"
     },
     {
       "description": "The Container Image to use for the ImageStream",

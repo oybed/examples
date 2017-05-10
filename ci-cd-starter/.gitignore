@@ -2,3 +2,4 @@ inventory
 *.retry
 roles
 ansible-stacks
+vars/openshift-vars.json

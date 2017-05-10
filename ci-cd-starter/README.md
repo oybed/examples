@@ -18,12 +18,15 @@ The following must be installed and on your `$PATH`
 ``` bash
 $ ./run.sh
 ```
+### By Default...
 
 The script will prompt you for the following
 
 * `openshift_user`: user to login into OpenShift
 * `openshift_password`: password for above user
 * `openshift_url`: OpenShift REST API endpoint
+
+### Advanced Users Might Prefer...
 
 Advanced users might find that annoying, so feel free to add the above vars to the inventory file and then comments out the `vars_prompt` in [the playbook](ci-cd-starter-playbook.yml)
 
