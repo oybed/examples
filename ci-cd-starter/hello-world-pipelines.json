@@ -1,0 +1,118 @@
+{
+    "kind": "Template",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "jenkins-s2i",
+        "annotations": {
+            "openshift.io/display-name": "Jenkins S2I",
+            "description": "Jenkins S2I build config to create a Jenkins image with your configuration baked in.",
+            "iconClass": "icon-jenkins",
+            "tags": "instant-app,jenkins"
+        }
+    },
+    "objects": [
+        {
+            "apiVersion": "v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "labels": {
+                    "build": "hello-world-maven"
+                },
+                "name": "hello-world-maven"
+            },
+            "spec": {
+                "nodeSelector": {},
+                "output": {},
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "hello-world-maven",
+                    "git": {
+                        "ref": "master",
+                        "uri": "https://github.com/sherl0cks/Jenkinsfiles"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "jenkinsPipelineStrategy": {
+                        "jenkinsfilePath": "Jenkinsfile"
+                    },
+                    "type": "JenkinsPipeline"
+                },
+                "triggers": [
+                    {
+                        "github": {
+                            "secret": "${MAVEN_GITHUB_WEBHOOK_SECRET}"
+                        },
+                        "type": "GitHub"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "labels": {
+                    "build": "hello-world-npm"
+                },
+                "name": "hello-world-npm"
+            },
+            "spec": {
+                "nodeSelector": {},
+                "output": {},
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "hello-world-npm",
+                    "git": {
+                        "ref": "master",
+                        "uri": "https://github.com/sherl0cks/Jenkinsfiles"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "jenkinsPipelineStrategy": {
+                        "jenkinsfilePath": "Jenkinsfile"
+                    },
+                    "type": "JenkinsPipeline"
+                },
+                "triggers": [
+                    {
+                        "github": {
+                            "secret": "${NPM_GITHUB_WEBHOOK_SECRET}"
+                        },
+                        "type": "GitHub"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    }
+                ]
+            }
+        }
+    ],
+    "parameters": [
+        {
+            "name": "MAVEN_GITHUB_WEBHOOK_SECRET",
+            "displayName": "GitHub Webhook Secret for Maven",
+            "description": "A secret string used to configure the GitHub webhook for the Maven hello world pipeline.",
+            "generate": "expression",
+            "from": "[a-zA-Z0-9]{40}"
+        },
+        {
+            "name": "NPM_GITHUB_WEBHOOK_SECRET",
+            "displayName": "GitHub Webhook Secret for NPM",
+            "description": "A secret string used to configure the GitHub webhook for the NPM hello world pipeline.",
+            "generate": "expression",
+            "from": "[a-zA-Z0-9]{40}"
+        }
+    ],
+    "labels": {
+        "template": "hello-world-pipelines"
+    }
+}

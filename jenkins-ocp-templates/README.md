@@ -1,8 +1,10 @@
-# Introduction
+# Jenkins on OpenShift Container Platform Example
+
+## Introduction
 
 This example shows how to use the out of the box [Jenkins templates from OpenShift](https://github.com/openshift/origin/blob/master/examples/jenkins/jenkins-ephemeral-template.json) with the [Jenkins S2I builder](https://docs.openshift.com/container-platform/3.3/using_images/other_images/jenkins.html), and configuration manage the whole thing with [ansible-stacks](https://github.com/rht-labs/ansible-stacks).
 
-# Requirements
+## Requirements
 
 The following must be installed and on your `$PATH`
 
@@ -11,7 +13,7 @@ The following must be installed and on your `$PATH`
 - `git`
 
 
-# Usage
+## Usage
 
 ``` bash
 $ ./run.sh
@@ -23,9 +25,9 @@ The script will prompt you for the following
 * `openshift_password`: password for above user
 * `openshift_url`: OpenShift REST API endpoint
 
-Advanced users might find that annoying, so feel free to add the above vars to the inventory file and then comments out the `vars_prompt` in [the playbook](jenkins.yml)
+Advanced users might find that annoying, so feel free to add the above vars to the inventory file and then comments out the `vars_prompt` in [the playbook](jenkins-playbook.yml)
 
-# Notes
+## Notes
 
 **General:**
 * only `openshift_url` is supported, not `openshift_cluster.openshift_host_env`

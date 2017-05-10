@@ -10,12 +10,10 @@
             "environment_type": "build",
             "templates": [
               {
-                "filename": "nexus-persistent-template.json"
-              },
-              {
                 "filename": "jenkins-s2i-template.json",
                 "parameters": {
-                  "SOURCE_REPOSITORY_URL": "https://github.com/rht-labs/openshift-jenkins-s2i-config.git",
+                  "SOURCE_REPOSITORY_URL": "https://github.com/sherl0cks/openshift-jenkins-s2i-config.git",
+                  "SOURCE_REPOSITORY_REF": "plugin-update",
                   "NAME": "jenkins"
                 }
               },
@@ -25,6 +23,12 @@
                   "NAMESPACE": "pipelines",
                   "MEMORY_LIMIT": "2Gi"
                 }
+              },
+              {
+                "filename": "nexus-persistent-template.json"
+              },
+              {
+                "filename": "hello-world-pipelines.json"
               }
             ]
           }
