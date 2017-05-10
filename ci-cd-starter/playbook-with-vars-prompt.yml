@@ -19,3 +19,4 @@
   roles:
     - openshift-defaults
     - create-openshift-resources
+    - configure-nexus
