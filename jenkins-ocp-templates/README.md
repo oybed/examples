@@ -23,6 +23,8 @@ The script will prompt you for the following
 * `openshift_password`: password for above user
 * `openshift_url`: OpenShift REST API endpoint
 
+Advanced users might find that annoying, so feel free to add the above vars to the inventory file and then comments out the `vars_prompt` in [the playbook](jenkins.yml)
+
 # Notes
 
 **General:**
@@ -31,8 +33,3 @@ The script will prompt you for the following
 ``` json
 "JENKINS_PASSWORD": "your_password_here",
 ```
-
-**The error handling isn't robust in this playbook. To make things go smoothly:**
-* pick a user that has privileges to create new projects
-* ensure a project named `pipelines` does not exit when you run this playbook
-  * this means deleting the existing project if you need to rerun for any reason
