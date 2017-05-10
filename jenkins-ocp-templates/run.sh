@@ -4,7 +4,9 @@
 # for everyone else, this makes it easy
 if [ ! -d roles ]; then
   git clone https://github.com/sherl0cks/ansible-stacks.git
+  cd ansible-stacks
   git checkout template-processing
+  cd ..
   mv ansible-stacks/roles .
 fi
 
