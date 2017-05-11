@@ -4,8 +4,8 @@
     "metadata": {
         "name": "jenkins-s2i",
         "annotations": {
-            "openshift.io/display-name": "Jenkins S2I",
-            "description": "Jenkins S2I build config to create a Jenkins image with your configuration baked in.",
+            "openshift.io/display-name": "Hello World Pipelines",
+            "description": "Basic Jenkins Pipelines to show that OCP / Jenkins / Nexus integration.",
             "iconClass": "icon-jenkins",
             "tags": "instant-app,jenkins"
         }
@@ -29,8 +29,8 @@
                 "source": {
                     "contextDir": "hello-world-maven",
                     "git": {
-                        "ref": "master",
-                        "uri": "https://github.com/sherl0cks/Jenkinsfiles"
+                        "ref": "${MAVEN_SOURCE_REPOSITORY_REF}",
+                        "uri": "${MAVEN_SOURCE_REPOSITORY_URL}"
                     },
                     "type": "Git"
                 },
@@ -71,8 +71,8 @@
                 "source": {
                     "contextDir": "hello-world-npm",
                     "git": {
-                        "ref": "master",
-                        "uri": "https://github.com/sherl0cks/Jenkinsfiles"
+                        "ref": "${NPM_SOURCE_REPOSITORY_REF}",
+                        "uri": "${NPM_SOURCE_REPOSITORY_URL}"
                     },
                     "type": "Git"
                 },
@@ -110,6 +110,32 @@
             "description": "A secret string used to configure the GitHub webhook for the NPM hello world pipeline.",
             "generate": "expression",
             "from": "[a-zA-Z0-9]{40}"
+        },
+        {
+            "name": "MAVEN_SOURCE_REPOSITORY_URL",
+            "displayName": "Git Repository URL",
+            "description": "The URL of the repository with your Jenkinsfile.",
+            "required": true,
+            "value": "https://github.com/rht-labs/Jenkinsfiles"
+        },
+        {
+            "name": "MAVEN_SOURCE_REPOSITORY_REF",
+            "displayName": "Git Reference",
+            "description": "Set this to a branch name, tag or other ref of your repository if you are not using the default (master) branch.",
+            "value": "master"
+        },
+        {
+            "name": "NPM_SOURCE_REPOSITORY_URL",
+            "displayName": "Git Repository URL",
+            "description": "The URL of the repository with your Jenkinsfile.",
+            "required": true,
+            "value": "https://github.com/rht-labs/Jenkinsfiles"
+        },
+        {
+            "name": "NPM_SOURCE_REPOSITORY_REF",
+            "displayName": "Git Reference",
+            "description": "Set this to a branch name, tag or other ref of your repository if you are not using the default (master) branch.",
+            "value": "master"
         }
     ],
     "labels": {

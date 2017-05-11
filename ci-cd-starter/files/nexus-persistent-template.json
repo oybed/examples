@@ -4,10 +4,10 @@
   "metadata": {
     "name": "jenkins-s2i",
     "annotations": {
-      "openshift.io/display-name": "Jenkins S2I",
-      "description": "Jenkins S2I build config to create a Jenkins image with your configuration baked in.",
-      "iconClass": "icon-jenkins",
-      "tags": "instant-app,jenkins"
+      "openshift.io/display-name": "Nexus Persistent Template",
+      "description": "Creates a Nexus with configuration and artifacts stored in a persistent volume.",
+      "iconClass": "icon-nexus",
+      "tags": "instant-app"
     }
   },
   "objects": [

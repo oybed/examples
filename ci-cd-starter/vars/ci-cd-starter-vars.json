@@ -10,11 +10,24 @@
             "environment_type": "build",
             "templates": [
               {
-                "filename": "files/jenkins-s2i-template.json",
+                "filename": "files/mvn-build-pod-template.json",
                 "parameters": {
-                  "SOURCE_REPOSITORY_URL": "https://github.com/sherl0cks/openshift-jenkins-s2i-config.git",
-                  "SOURCE_REPOSITORY_REF": "plugin-update",
-                  "NAME": "jenkins"
+                  "SOURCE_REPOSITORY_URL": "https://github.com/sherl0cks/examples",
+                  "SOURCE_REPOSITORY_REF": "ci-cd"
+                }
+              },
+              {
+                "filename": "files/nexus-persistent-template.json",
+                "parameters": {
+                  "VOLUME_CAPACITY": "10Gi",
+                  "MEMORY_LIMIT": "2Gi"
+                }
+              },
+              {
+                "filename": "files/hello-world-pipelines-template.json",
+                "parameters": {
+                  "MAVEN_SOURCE_REPOSITORY_URL" : "https://github.com/sherl0cks/Jenkinsfiles",
+                  "NPM_SOURCE_REPOSITORY_URL" : "https://github.com/sherl0cks/Jenkinsfiles"
                 }
               },
               {
@@ -25,14 +38,12 @@
                 }
               },
               {
-                "filename": "files/nexus-persistent-template.json",
-                "parameters" : {
-                  "VOLUME_CAPACITY" : "10Gi",
-                  "MEMORY_LIMIT" : "2Gi"
+                "filename": "files/jenkins-s2i-template.json",
+                "parameters": {
+                  "SOURCE_REPOSITORY_URL": "https://github.com/sherl0cks/openshift-jenkins-s2i-config.git",
+                  "SOURCE_REPOSITORY_REF": "plugin-update",
+                  "NAME": "jenkins"
                 }
-              },
-              {
-                "filename": "files/hello-world-pipelines-template.json"
               }
             ]
           }
