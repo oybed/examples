@@ -34,12 +34,14 @@ To put their credential information in an ansible vars file so they aren't promp
 ## Done
 - `run.sh` with smart loading of correct playbook based on variable files present
 - Persistent Nexus template
+- Nexus Configuration in ansible
 - Ephemeral Jenkins with predefined plugin configuration
 - Hello World pipelines for maven and npm (integrated with OCP pipelines and BlueOcean)
+- maven pod build config to publish artifacts to Nexus
 
 ## WIP
 
-- maven pod build config to publish artifacts to Nexus
+- maven build pod added to ansible stacks
 
 ## TO DO
 - Dev / Test / UAT for a Java REST API
