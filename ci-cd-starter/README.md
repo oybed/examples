@@ -30,6 +30,10 @@ The script will prompt you for the following variables
 
 To put their credential information in an ansible vars file so they aren't prompted for it on CLI every time. Therefore; we wrote `run.sh` to detect the presence of `vars/openshift-vars.json`, `vars/openshift-vars.yaml` or `vars/openshift-vars.yml` and use those variable files instead of prompting you. These files are also `.gitignored` so you don't accidentally commit your credentials to SCM.
 
+### If You Want To Use A Project/Namespace Other Than `pipelines`
+
+You'll need to edit a [var file](vars/ci-cd-starer-vars.json). Specifically, line values in `8` and `36` to indicate the project name you want to use. TODO - find a way to automate this.
+
 ## How to Know It's Working
 
 You want to see that a basic Java app has been built my Jenkins and deployed the nexus. Here's how to do that.
