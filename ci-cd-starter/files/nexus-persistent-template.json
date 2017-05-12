@@ -127,7 +127,7 @@
       "kind": "Service",
       "metadata": {
         "labels": {
-          "app": "${NAME}"
+          "name": "${NAME}"
         },
         "name": "${NAME}"
       },
@@ -151,7 +151,7 @@
       "kind": "ImageStream",
       "metadata": {
         "labels": {
-          "app": "${NAME}"
+          "name": "${NAME}"
         },
         "name": "${NAME}"
       },
@@ -179,7 +179,7 @@
       "kind": "Route",
       "metadata": {
         "labels": {
-          "app": "${NAME}"
+          "name": "${NAME}"
         },
         "name": "${NAME}"
       },

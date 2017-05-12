@@ -34,6 +34,12 @@ To put their credential information in an ansible vars file so they aren't promp
 
 You'll need to edit a [var file](vars/ci-cd-starer-vars.json). Specifically, line values in `8` and `36` to indicate the project name you want to use. TODO - find a way to automate this.
 
+## Access Control
+
+1. Nexus is configured to use the default user `admin` & password `admin123`
+2. Jenkins is configured to use the [OpenShift OAuth plugin](https://github.com/openshift/jenkins-openshift-login-plugin), which will inspect a users OCP `rolebindings` for the project Jenkins lives in (by default `pipelines` in this example), and then assign a user Jenkins permissions accordingly. Therefore; make sure any users accessing Jenkins have the related permissions (e.g. `edit`, `view`, `admin`) in the Jenkins OCP project.
+
+
 ## How to Know It's Working
 
 You want to see that a basic Java app has been built my Jenkins and deployed the nexus. Here's how to do that.
@@ -43,6 +49,8 @@ You want to see that a basic Java app has been built my Jenkins and deployed the
 3. If the build begins to checkout source code and building the app, then jump to step 4. If the build just hangs for a minute or so, with a message like "[Pipeline] node Still waiting to schedule task Waiting for next available executor:", you need to redeploy Jenkins (via the UI by clicking on the Jenkins deployment or via CLI). What's happened here is that Jenkins was deployed before the `mvn` slave image it needs was finished building. Jenkins will automatically pick it up on reboot. Go back to step 1.
 4. Wait for the build to complete successfully. If it fails, then something is wrong - open a ticket in this repo.
 5. Navigate to the Nexus webpage and click on browse -> components -> labs-snapshots. You should see an entry for "automation-api." If not, something went wrong - open a ticket in this repo.
+
+If you prefer, you can actually do the above steps by using the new Builds -> Pipelines tab in OpenShift Console as well. Be advised that "Build #1" in the Pipelines view may show build started, when in fact the build is not running because Jenkins redeployed. In this case, you'll need to kick a new build.
 
 ## Done
 - `run.sh` with smart loading of correct playbook based on variable files present

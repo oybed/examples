@@ -5,10 +5,13 @@
       "openshift_resources": {
         "projects": [
           {
-            "name": "pipelines",
+            "name": "pipelines3",
             "display_name": "Pipelines",
             "environment_type": "build",
             "templates": [
+              {
+                "filename": "files/java-app-build-template.json"
+              },
               {
                 "filename": "files/mvn-build-pod-template.json",
                 "parameters": {
@@ -26,14 +29,14 @@
               {
                 "filename": "files/hello-world-pipelines-template.json",
                 "parameters": {
-                  "MAVEN_SOURCE_REPOSITORY_URL" : "https://github.com/sherl0cks/Jenkinsfiles",
-                  "NPM_SOURCE_REPOSITORY_URL" : "https://github.com/sherl0cks/Jenkinsfiles"
+                  "MAVEN_SOURCE_REPOSITORY_URL": "https://github.com/sherl0cks/Jenkinsfiles",
+                  "NPM_SOURCE_REPOSITORY_URL": "https://github.com/sherl0cks/Jenkinsfiles"
                 }
               },
               {
                 "name": "openshift//jenkins-ephemeral",
                 "parameters": {
-                  "NAMESPACE": "pipelines",
+                  "NAMESPACE": "pipelines3",
                   "MEMORY_LIMIT": "2Gi"
                 }
               },
@@ -44,6 +47,36 @@
                   "SOURCE_REPOSITORY_REF": "plugin-update",
                   "NAME": "jenkins"
                 }
+              }
+            ]
+          },
+          {
+            "name": "dev",
+            "display_name": "Labs Development",
+            "environment_type": "deploy",
+            "templates": [
+              {
+                "filename": "files/java-app-deploy-template.json"
+              }
+            ]
+          },
+          {
+            "name": "test",
+            "display_name": "Labs Test",
+            "environment_type": "deploy",
+            "templates": [
+              {
+                "filename": "files/java-app-deploy-template.json"
+              }
+            ]
+          },
+          {
+            "name": "uat",
+            "display_name": "Labs User Acceptance Test",
+            "environment_type": "deploy",
+            "templates": [
+              {
+                "filename": "files/java-app-deploy-template.json"
               }
             ]
           }
