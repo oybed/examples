@@ -55,6 +55,12 @@
                     "spec": {
                         "containers": [
                             {
+                                "env": [
+                                    {
+                                        "name": "JAVA_OPTIONS",
+                                        "value": "-Dspring.profiles.active=hsql"
+                                    }
+                                ],
                                 "image": "${NAME}",
                                 "imagePullPolicy": "Always",
                                 "name": "${NAME}",
@@ -160,6 +166,46 @@
                 },
                 "wildcardPolicy": "None"
             }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "RoleBinding",
+            "metadata": {
+                "name": "edit"
+            },
+            "roleRef": {
+                "name": "edit"
+            },
+            "subjects": [
+                {
+                    "kind": "ServiceAccount",
+                    "name": "jenkins",
+                    "namespace": "${PIPELINES_NAMESPACE}"
+                }
+            ],
+            "userNames": [
+                "system:serviceaccount:${PIPELINES_NAMESPACE}:jenkins"
+            ]
+        },
+        {
+            "apiVersion": "v1",
+            "groupNames": [
+                "system:serviceaccounts:${APP_NAMESPACE}"
+            ],
+            "kind": "RoleBinding",
+            "metadata": {
+                "name": "view"
+            },
+            "roleRef": {
+                "name": "view"
+            },
+            "subjects": [
+                {
+                    "kind": "SystemGroup",
+                    "name": "system:serviceaccounts:${APP_NAMESPACE}"
+                }
+            ],
+            "userNames": null
         }
     ],
     "parameters": [
@@ -169,6 +215,19 @@
             "description": "The name assigned to all objects and the resulting imagestream.",
             "required": true,
             "value": "java-app"
+        },
+        {
+            "name": "PIPELINES_NAMESPACE",
+            "displayName": "Project/Namespace for Jenkins Pipelines",
+            "description": "The project/namespace where the Jenkins executing pipelines is deployed.",
+            "required": true,
+            "value": "labs-ci-cd"
+        },
+        {
+            "name": "APP_NAMESPACE",
+            "displayName": "Project/Namespace for the Java App",
+            "description": "The project/namespace where the Jenkins executing pipelines is deployed.",
+            "required": true
         }
     ],
     "labels": {

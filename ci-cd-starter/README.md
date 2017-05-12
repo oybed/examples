@@ -30,9 +30,9 @@ The script will prompt you for the following variables
 
 To put their credential information in an ansible vars file so they aren't prompted for it on CLI every time. Therefore; we wrote `run.sh` to detect the presence of `vars/openshift-vars.json`, `vars/openshift-vars.yaml` or `vars/openshift-vars.yml` and use those variable files instead of prompting you. These files are also `.gitignored` so you don't accidentally commit your credentials to SCM.
 
-### If You Want To Use A Project/Namespace Other Than `pipelines`
+### If You Want To Use A Project/Namespace Other Than `labs-ci-cd`
 
-You'll need to edit a [var file](vars/ci-cd-starer-vars.json). Specifically, line values in `8` and `36` to indicate the project name you want to use. TODO - find a way to automate this.
+You'll need to edit a [var file](vars/ci-cd-starer-vars.json). Specifically, line values in `8` and `42` to indicate the project name you want to use. TODO - find a way to automate this.
 
 ## Access Control
 
@@ -52,7 +52,16 @@ You want to see that a basic Java app has been built my Jenkins and deployed the
 
 If you prefer, you can actually do the above steps by using the new Builds -> Pipelines tab in OpenShift Console as well. Be advised that "Build #1" in the Pipelines view may show build started, when in fact the build is not running because Jenkins redeployed. In this case, you'll need to kick a new build.
 
-## Done
+## Conventions in Use
+
+- 2 BuildConfig per app. One for s2i and one for a pipeline. They should be named `foo-app` and `foo-app-pipeline`
+- 3 projects in user, all prefixed with a common identifier e.g. `labs-dev`, `labs-test`, `labs-uat`
+- use environment variables set by OCP and Jenkins to obtain info like tokens, namespace etc. instead of setting it yourself in pipeline script
+- TODO: probably others
+
+## Progress
+
+### Done
 - `run.sh` with smart loading of correct playbook based on variable files present
 - Persistent Nexus template
 - Nexus Configuration in ansible
@@ -60,14 +69,18 @@ If you prefer, you can actually do the above steps by using the new Builds -> Pi
 - Hello World pipelines for maven and npm (integrated with OCP pipelines and BlueOcean)
 - maven pod build config to publish artifacts to Nexus
 - maven build pod added to ansible stacks
-
-## WIP
-
 - Dev / Test / UAT for a Java REST API
-- Jenkins pipelines for both JAVA REST API
+- Jenkins pipelines for JAVA REST API (using automation API server for now)
 
-## TO DO
+### WIP
+
+
+### TO DO
 
 - Dev / Test / UAT for a JS/HTML web app that talks to the rest API
-- Jenkins pipelines webapp
+- Jenkins pipeline for webapp
 - Remove sample OCP pipeline from Jenkins
+
+## Known Issues
+
+- Jenkins deploys once immediately after instantiation, and then once as the Jenkins s2i build completes. Expected behavior is that deployment waits until s2i build populates image stream. Somehow the imagestream is being populated before. This causes pipeline build objects in OCP to start and then never complete, so "build #1" always shows "running" in the UI. Forces end user to kick builds back off in Jenkins, instead of having them automagically run.

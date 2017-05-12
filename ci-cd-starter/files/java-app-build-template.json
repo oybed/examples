@@ -16,6 +16,49 @@
             "kind": "BuildConfig",
             "metadata": {
                 "labels": {
+                    "build": "${NAME}",
+                    "name": "${NAME}-pipeline"
+                },
+                "name": "${NAME}-pipeline"
+            },
+            "spec": {
+                "nodeSelector": {},
+                "output": {},
+                "postCommit": {},
+                "resources": {},
+                "runPolicy": "Serial",
+                "source": {
+                    "contextDir": "standard-java-mvn-s2i-binary",
+                    "git": {
+                        "ref": "${PIPELINE_SOURCE_REPOSITORY_REF}",
+                        "uri": "${PIPELINE_SOURCE_REPOSITORY_URL}"
+                    },
+                    "type": "Git"
+                },
+                "strategy": {
+                    "jenkinsPipelineStrategy": {
+                        "jenkinsfilePath": "Jenkinsfile"
+                    },
+                    "type": "JenkinsPipeline"
+                },
+                "triggers": [
+                    {
+                        "github": {
+                            "secret": "${PIPELINE_GITHUB_WEBHOOK_SECRET}"
+                        },
+                        "type": "GitHub"
+                    },
+                    {
+                        "type": "ConfigChange"
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "v1",
+            "kind": "BuildConfig",
+            "metadata": {
+                "labels": {
                     "build": "${NAME}"
                 },
                 "name": "${NAME}"
@@ -84,6 +127,19 @@
             "description": "A secret string used to configure the GitHub webhook.",
             "generate": "expression",
             "from": "[a-zA-Z0-9]{40}"
+        },
+        {
+            "name": "PIPELINE_SOURCE_REPOSITORY_URL",
+            "displayName": "Git Repository URL",
+            "description": "The URL of the repository with your Jenkinsfile.",
+            "required": true,
+            "value": "https://github.com/rht-labs/Jenkinsfiles"
+        },
+        {
+            "name": "PIPELINE_SOURCE_REPOSITORY_REF",
+            "displayName": "Git Reference",
+            "description": "Set this to a branch name, tag or other ref of your repository if you are not using the default (master) branch.",
+            "value": "master"
         }
     ],
     "labels": {
