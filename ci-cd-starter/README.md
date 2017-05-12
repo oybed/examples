@@ -8,7 +8,7 @@ This is an example to get a baseline CI / CD environment for Java dev ready
 
 The following must be installed and on your `$PATH`
 
-- `oc`
+- `oc` 3.5.x 
 - `ansible` 2.2.0.0 or 2.2.1.0
 - `git`
 
