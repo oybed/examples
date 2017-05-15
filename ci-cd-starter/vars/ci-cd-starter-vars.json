@@ -30,13 +30,6 @@
                 }
               },
               {
-                "filename": "files/hello-world-pipelines-template.json",
-                "parameters": {
-                  "MAVEN_SOURCE_REPOSITORY_URL": "https://github.com/sherl0cks/Jenkinsfiles",
-                  "NPM_SOURCE_REPOSITORY_URL": "https://github.com/sherl0cks/Jenkinsfiles"
-                }
-              },
-              {
                 "name": "openshift//jenkins-ephemeral",
                 "parameters": {
                   "NAMESPACE": "labs-ci-cd",

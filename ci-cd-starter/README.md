@@ -2,7 +2,20 @@
 
 ## Introduction
 
-This is an example to get a baseline CI / CD environment for Java dev ready
+This example will build a baseline CI / CD environment with an example Java app and a web app. The goal is to put in place common tools and ensure their integration, and then provide a few apps to show you the environment in action. We're using automation provide by our [ansible-stacks](https://github.com/sherl0cks/ansible-stacks/tree/template-processing) repository to power this example. Our hope is that you'll extend the approach we've taken here to model your own environment with an infrastructure as code mindset.
+
+## What's In The Box?
+
+- Jenkins 2.x, configured with Blue Ocean and all OCP plugins. Jenkins is not backed by a persistent volume at this time.
+- Nexus 3.x, configured with Red Hat maven repositories and backed by a persistent volume
+- Java 8, Maven 3.3.x build slave for Jenkins, pre-configured to use Nexus
+- Example CI / CD pipeline, configured to work with Jenkins pipelines and OpenShift Pipeline builds
+- Example Java
+
+Still TODO:
+- Example web app (i.e. JS/HTML/CSS)
+- Example CI / CD pipeline for the web app
+- Sonarqube installation, integrated with the CI/CD pipelines.
 
 ## Requirements
 
@@ -11,7 +24,6 @@ The following must be installed and on your `$PATH`
 - `oc` 3.5.x.x
 - `ansible` 2.2.0.0 or 2.2.1.0
 - `git`
-
 
 ## Usage
 
@@ -42,12 +54,12 @@ You'll need to edit a [var file](vars/ci-cd-starer-vars.json). Specifically, a l
 
 ## How to Know It's Working
 
-You want to see that a basic Java app has been built my Jenkins and deployed the nexus. Here's how to do that.
+You want to see that a basic Java app has been built my Jenkins, deployed the nexus and awaiting deployment. Here's how to do that.
 
-1. Login into Jenkins. You'll see a hello world maven build. If it's already run, jump to step TODO
+1. Login into Jenkins. You'll see a `ci-cd/java-app-pipeline` build. If it's already run, jump to step TODO
 2. If it hasn't run yet, kick it off.
-3. If the build begins to checkout source code and building the app, then jump to step 4. If the build just hangs for a minute or so, with a message like "[Pipeline] node Still waiting to schedule task Waiting for next available executor:", you need to redeploy Jenkins (via the UI by clicking on the Jenkins deployment or via CLI). What's happened here is that Jenkins was deployed before the `mvn` slave image it needs was finished building. Jenkins will automatically pick it up on reboot. Go back to step 1.
-4. Wait for the build to complete successfully. If it fails, then something is wrong - open a ticket in this repo.
+3. If the build begins to checkout source code and building the app, then jump to step 4. If the build just hangs for a minute or so, with a message like "[Pipeline] node Still waiting to schedule task Waiting for next available executor:", you need to redeploy Jenkins (via the UI by clicking on the Jenkins deployment or via CLI). What's happened here is that Jenkins was deployed before the `mvn-build-pod` slave image it needs was finished building. Jenkins will automatically pick it up on reboot. Go back to step 1.
+4. The build should finish compiling the app, deploying to nexus, and creating a container image. It should now wait for confirmation to deploy the image. Approve the deployment and check that the deployment in the `Dev` project completes. If it fails, then something is wrong - open a ticket in this repo.
 5. Navigate to the Nexus webpage and click on browse -> components -> labs-snapshots. You should see an entry for "automation-api." If not, something went wrong - open a ticket in this repo.
 
 If you prefer, you can actually do the above steps by using the new Builds -> Pipelines tab in OpenShift Console as well. Be advised that "Build #1" in the Pipelines view may show build started, when in fact the build is not running because Jenkins redeployed. In this case, you'll need to kick a new build.
@@ -58,28 +70,6 @@ If you prefer, you can actually do the above steps by using the new Builds -> Pi
 - 3 projects in user, all prefixed with a common identifier e.g. `labs-dev`, `labs-test`, `labs-uat`
 - use environment variables set by OCP and Jenkins to obtain info like tokens, namespace etc. instead of setting it yourself in pipeline script
 - TODO: probably others
-
-## Progress
-
-### Done
-- `run.sh` with smart loading of correct playbook based on variable files present
-- Persistent Nexus template
-- Nexus Configuration in ansible
-- Ephemeral Jenkins with predefined plugin configuration
-- Hello World pipelines for maven and npm (integrated with OCP pipelines and BlueOcean)
-- maven pod build config to publish artifacts to Nexus
-- maven build pod added to ansible stacks
-- Dev / Test / UAT for a Java REST API
-- Jenkins pipelines for JAVA REST API (using automation API server for now)
-
-### WIP
-
-
-### TO DO
-
-- Dev / Test / UAT for a JS/HTML web app that talks to the rest API
-- Jenkins pipeline for webapp
-- Remove sample OCP pipeline from Jenkins
 
 ## Known Issues
 
